@@ -1,0 +1,8 @@
+%h1 Projects
+
+%table
+  %tr
+    %th Name
+  - @projects.each do |project|
+    %tr
+      %td= link_to project.name, project_users_path(project)
