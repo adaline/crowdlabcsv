@@ -18,13 +18,13 @@ class CsvImporter
   end
 
   def self.expected_fields_in_order
-    %w(name email password born_on gender).each_with_index.map {|field, index| [field, index]}
+    %w(name email password born_on gender extra).each_with_index.map {|field, index| [field, index]}
   end
 
   def self.fake_csv(number)
     CSV.generate do |csv|
       # Header (the fields are intentionally in the wrong order)
-      csv <<   %w(gender name email password born_on)
+      csv << %w(gender name email password born_on favourite_colour duns)
       # Data
       for index in 0..number
         csv << [
@@ -32,7 +32,9 @@ class CsvImporter
           Faker::Name.name,
           Faker::Internet.email,
           Faker::Internet.password,
-          Faker::Time.between(2.years.ago, 1.year.ago)
+          Faker::Time.between(2.years.ago, 1.year.ago),
+          Faker::Commerce.color,
+          Faker::Company.duns_number
         ]
       end
     end
@@ -47,9 +49,19 @@ class CsvImporter
 
   def map_data(column_order)
     # Ugly but fast solution
+    header_fields = header
     data.map do |row|
       new_array = []
-      (0..column_order.size-1).each {|i| new_array[column_order[i]] = row[i]}
+      extras = {}
+      (0..column_order.size-1).each do |i|
+        # Add value based on mapping
+        new_array[column_order[i]] = row[i]
+        # Move extra fields out
+        extras[header_fields[i]] = row[i] if column_order[i] == 5
+      end
+      # Add extras as the last field in mapped row
+      new_array[5] = extras
+      # Return it
       new_array
     end
   end
@@ -58,11 +70,18 @@ class CsvImporter
     project = Project.find_by id: project_id
     mapped_data.each do |row|
       existing_user = project.users.find_by email: row[1]
+      # Create or update user
       if existing_user
         existing_user.update_attributes row_to_hash(row)
+        user = existing_user
       else
-        project.users.create row_to_hash(row)
+        user = project.users.create row_to_hash(row)
       end
+
+      # Update membership with extra fields
+      membership = Membership.find_by user_id: user.id, project_id: project.id
+      membership.attached_data = row[5]
+      membership.save
     end
   end
 

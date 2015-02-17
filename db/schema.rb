@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20150217175313) do
   create_table "memberships", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "project_id"
+    t.text     "extra"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

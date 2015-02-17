@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     # Sort mapping by the csv header
     csv_header = importer.header
     sort_order = csv_header.map {|field| mapping[field].to_i }
-    
+
     importer.import_data(@project.id, sort_order)
 
     redirect_to project_users_path(@project), notice: 'Users imported from CSV'

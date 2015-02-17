@@ -7,6 +7,10 @@ class User < ActiveRecord::Base
 
   before_validation :normalize_gender_field
 
+  def get_project_membership(project_id)
+    self.memberships.find_by project_id: project_id
+  end
+
   private
 
   def normalize_gender_field

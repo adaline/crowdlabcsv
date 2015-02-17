@@ -16,6 +16,7 @@
     %th Password
     %th Gender
     %th DoB
+    %th Project specific records
   - @users.each do |user|
     %tr
       %td= user.email
@@ -23,3 +24,10 @@
       %td= user.password
       %td= user.gender
       %td= user.born_on
+      %td
+        %table
+          - user.get_project_membership(@project.id).attached_data.each_pair do |key, value|
+            %strong
+              = key
+              \:
+            = value
