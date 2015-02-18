@@ -12,7 +12,7 @@ The test suit is by no means exhaustive, i assume i have demonstrated enough kno
 
 The interface is not production quality, since you specify that you are 'looking for good practice rather than a polished tool' i have foregone taking time to do exhaustive validation and UX work. Needless to say there is no auth, roles and crud, this is just bare bone project to demonstrate aptitude.
 
-To demonstrate git skills, I have added a patch with some extra stuff, apply after initial look through and spot the difference!
+To demonstrate git skills, I have added a branch with some extra stuff, checkout the branch after initial look through, run bundle and spot the difference!
 
 
 Enjoy :)
