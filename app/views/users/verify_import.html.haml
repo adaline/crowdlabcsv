@@ -1,9 +1,10 @@
-%h1 Verify data columns
+.container
+  %h1 Verify data columns
 
-= form_tag({action: :process_import} , method: "post") do
-  - @header.each do |field|
-    %p
-      %strong= field
-      maps to
-      = select_tag("field_mapping[#{field}]", options_for_select(@fields))
-  = submit_tag
+  = form_tag({action: :process_import} , method: "post") do
+    - @header.each do |field|
+      %p
+        %strong= field
+        maps to
+        = select_tag("field_mapping[#{field}]", options_for_select(@fields))
+    = submit_tag

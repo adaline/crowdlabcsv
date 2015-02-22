@@ -1,8 +1,9 @@
-%h1 Projects
+.container
+  %h1 Projects
 
-%table
-  %tr
-    %th Name
-  - @projects.each do |project|
+  %table.table.table-striped
     %tr
-      %td= link_to project.name, project_users_path(project)
+      %th Name
+    - @projects.each do |project|
+      %tr
+        %td= link_to project.name, project_users_path(project)

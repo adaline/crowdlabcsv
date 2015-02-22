@@ -1,33 +1,34 @@
-%h1 Users for project #{@project.name}
+.container
+  %h1 Users for project #{@project.name}
 
-%hr
-%p= link_to 'Back to project listing', projects_path
-%p= link_to 'Download a mock CSV', project_fake_csv_path
-%hr
-= form_tag({action: :verify_import} , method: "post", multipart: true) do
-  = file_field_tag 'file'
-  = submit_tag
+  %hr
+  = link_to 'Back to project listing', projects_path, class: 'btn btn-default'
+  = link_to 'Download a mock CSV', project_fake_csv_path, class: 'btn btn-default'
+  %hr
+  = form_tag({action: :verify_import} , method: "post", multipart: true) do
+    = file_field_tag 'file'
+    = submit_tag
 
-%hr
-%table
-  %tr
-    %th Email
-    %th Name
-    %th Password
-    %th Gender
-    %th DoB
-    %th Project specific records
-  - @users.each do |user|
+  %hr
+  %table.table.table.table-striped
     %tr
-      %td= user.email
-      %td= user.name
-      %td= user.password
-      %td= user.gender
-      %td= user.born_on
-      %td
-        %table
-          - user.get_project_membership(@project.id).attached_data.each_pair do |key, value|
-            %strong
-              = key
-              \:
-            = value
+      %th Email
+      %th Name
+      %th Password
+      %th Gender
+      %th DoB
+      %th Project specific records
+    - @users.each do |user|
+      %tr
+        %td= user.email
+        %td= user.name
+        %td= user.password
+        %td= user.gender
+        %td= user.born_on
+        %td
+          %table
+            - user.get_project_membership(@project.id).attached_data.each_pair do |key, value|
+              %strong
+                = key
+                \:
+              = value
