@@ -5,10 +5,6 @@ class UsersController < ApplicationController
     @users = @project.users
   end
 
-  def fake_csv
-    send_data CsvImporter.fake_csv(100), :filename => 'fake_user_data.csv'
-  end
-
   def verify_import
     # for this example's convinience only
     # not a realistic way to handle uplaods of course!

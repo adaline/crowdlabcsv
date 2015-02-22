@@ -3,7 +3,6 @@
 
   %hr
   = link_to 'Back to project listing', projects_path, class: 'btn btn-default'
-  = link_to 'Download a mock CSV', project_fake_csv_path, class: 'btn btn-default'
   %hr
   = form_tag({action: :verify_import} , method: "post", multipart: true) do
     = file_field_tag 'file'
