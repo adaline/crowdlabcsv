@@ -9,4 +9,16 @@ class Membership < ActiveRecord::Base
   def attached_data
     JSON.parse(self.extra)
   end
+
+  def self.create_or_update( data )
+    native_data = data.except(:attached_data)
+
+    membership = self.find_by native_data
+    membership = self.new(native_data) unless membership
+
+    membership.attached_data = data[:attached_data]
+    membership.save
+    # Return affected record
+    membership
+  end
 end

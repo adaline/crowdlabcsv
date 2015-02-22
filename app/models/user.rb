@@ -11,6 +11,18 @@ class User < ActiveRecord::Base
     self.memberships.find_by project_id: project_id
   end
 
+  def self.create_or_update( data )
+    user = self.find_by email: data[:email]
+
+    if user
+      user.update_attributes data
+    else
+      user = self.create data
+    end
+    # Return affected record
+    user
+  end
+
   private
 
   def normalize_gender_field

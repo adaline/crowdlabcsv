@@ -10,19 +10,18 @@ class UsersController < ApplicationController
     # not a realistic way to handle uplaods of course!
     session[:upload_data] = params[:file].read
 
-    @header = CsvImporter.new(session[:upload_data]).header
-    @fields = CsvImporter.expected_fields_in_order
+    @header = CsvReader.new(session[:upload_data]).header
+    @fields = UserImporter.expected_fields_in_order
   end
 
   def process_import
-    importer = CsvImporter.new(session[:upload_data])
-    mapping = params[:field_mapping]
+    reader = CsvReader.new(session[:upload_data])
 
     # Sort mapping by the csv header
-    csv_header = importer.header
-    sort_order = csv_header.map {|field| mapping[field].to_i }
+    sort_order = reader.header.map {|field| params[:field_mapping][field].to_i }
 
-    importer.import_data(@project.id, sort_order)
+    # Import data
+    importer = UserImporter.new(reader).import_data(@project.id, sort_order)
 
     redirect_to project_users_path(@project), notice: 'Users imported from CSV'
   end
